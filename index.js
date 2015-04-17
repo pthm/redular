@@ -12,7 +12,6 @@ var RedisEvent = require('./RedisEvent');
 var Redular = function(port, host, options){
   var _this = this;
 
-  this.handlers = {};
   this.redisSub = redis.createClient(port, host, options);
   this.redis = redis.createClient(port, host, options);
 
@@ -23,6 +22,10 @@ var Redular = function(port, host, options){
   });
 };
 
+Redular.prototype = {
+  handlers: {}
+};
+
 /**
  * Schedules an event to occur some time in the future
  * @param name {String} - The name of the event
@@ -30,12 +33,13 @@ var Redular = function(port, host, options){
  */
 Redular.prototype.scheduleEvent = function(name, date){
   var now = new Date();
+
   if(extras.isBefore(date, now)){
     return;
   }
 
   var diff = date.getTime() - now.getTime();
-  var seconds = Math.abs(diff / 1000);
+  var seconds = Math.floor(diff / 1000);
 
   this.redis.set('redular:event:' + name, name);
   this.redis.expire('redular:event:' + name, seconds);
@@ -67,4 +71,6 @@ Redular.prototype.defineHandler = function(name, action){
 };
 
 
-module.exports = Redular;
+module.exports = function(port, host, options){
+  return new Redular(port, host, options);
+};

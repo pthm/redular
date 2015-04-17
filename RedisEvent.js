@@ -16,7 +16,6 @@ var RedisEvent = function(client, event, keyPattern){
   this.redis.subscribe('__keyevent@0__:' + event);
   this.redis.on('message', function(event, key){
     var match = _this.keyPattern.exec(key);
-    //console.log('[Redis Event]'.magenta, event, key);
     if(match != null){
       if(_this.handler != null){
         _this.handler(match);
