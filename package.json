@@ -1,0 +1,23 @@
+{
+  "name": "redular",
+  "version": "1.0.0",
+  "description": "Node.js event system powered by redis keyspace notifications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pthm/redular.git"
+  },
+  "keywords": [
+    "redis",
+    "events"
+  ],
+  "author": "Patt-tom McDonnell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pthm/redular/issues"
+  },
+  "homepage": "https://github.com/pthm/redular"
+}
