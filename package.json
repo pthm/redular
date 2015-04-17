@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/pthm/redular/issues"
   },
-  "homepage": "https://github.com/pthm/redular"
+  "homepage": "https://github.com/pthm/redular",
+  "dependencies": {
+    "redis": "^0.12.1"
+  }
 }
