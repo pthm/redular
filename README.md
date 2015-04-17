@@ -1,6 +1,11 @@
 # redular
 Node.js event scheduling system powered by Redis keyspace notifications.
 
+# How it works
+This sets keys in redis with expiry times, then using the keyspace notifications triggers handlers defined in your code.
+
+This is useful because it means you can define handlers and trigger them from anywhere in your infrastructure.
+
 # Installation
 `npm install redular`
 
