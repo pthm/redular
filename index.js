@@ -10,10 +10,17 @@ var RedisEvent = require('./RedisEvent');
  * @constructor
  */
 var Redular = function(port, host, options){
+  var _this = this;
+
   this.handlers = {};
   this.redisSub = redis.createClient(port, host, options);
   this.redis = redis.createClient(port, host, options);
-  this.setup();
+
+  var expiryListener = new RedisEvent(this.redisSub, 'expired', /(redular:event:)(.+)/);
+  expiryListener.defineHandler(function(key){
+    var eventName = key[2];
+    _this.handleEvent(eventName);
+  });
 };
 
 /**
@@ -42,18 +49,6 @@ Redular.prototype.handleEvent = function(name){
   if(this.handlers.hasOwnProperty(name)){
     this.handlers[name]();
   }
-};
-
-/**
- * Listens to redis client to subscribe to Keyspace Notifications
- */
-Redular.prototype.setup = function(){
-  var _this = this;
-  var expiryListener = new RedisEvent(this.redisSub, 'expired', /(redular:event:)(.+)/);
-  expiryListener.defineHandler(function(key){
-    var eventName = key[2];
-    _this.handleEvent(eventName);
-  });
 };
 
 /**
