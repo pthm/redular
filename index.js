@@ -1,6 +1,7 @@
 var redis = require('redis');
 var extras = require('./extras');
 var RedisEvent = require('./RedisEvent');
+var shortId = require('shortid');
 
 /**
  * Node.js scheduling system powered by Redis Keyspace Notifications
@@ -9,16 +10,34 @@ var RedisEvent = require('./RedisEvent');
  * @param options {Object} - See options here (https://github.com/mranney/node_redis#rediscreateclient)
  * @constructor
  */
-var Redular = function(port, host, options){
+var Redular = function(options){
   var _this = this;
 
-  this.redisSub = redis.createClient(port, host, options);
-  this.redis = redis.createClient(port, host, options);
+  if(!options){
+    options = {
+      redis: {}
+    };
+  }
 
-  var expiryListener = new RedisEvent(this.redisSub, 'expired', /(redular:event:)(.+)/);
+  this.options = {
+    id: options.id || shortId.generate(),
+    redis: {
+      port: options.redis.port || 6379,
+      host: options.redishost || '127.0.0.1',
+      redis: options.redis.options || {}
+    }
+  };
+
+  this.redisSub = redis.createClient(this.options.redis.port, this.options.redis.host, this.options.redis.options);
+  this.redis = redis.createClient(this.options.redis.port, this.options.redis.host, this.options.redis.options);
+
+  var expiryListener = new RedisEvent(this.redisSub, 'expired', /(redular:)(.+)(:)(.+)/);
   expiryListener.defineHandler(function(key){
-    var eventName = key[2];
-    _this.handleEvent(eventName);
+    var eventName = key[4];
+    var eventId = key[2];
+    if(eventId == _this.options.id || eventId == 'global'){
+      _this.handleEvent(eventName);
+    }
   });
 };
 
@@ -30,8 +49,9 @@ Redular.prototype = {
  * Schedules an event to occur some time in the future
  * @param name {String} - The name of the event
  * @param date {Date} - Javascript date object when the event should occur, must be in the future
+ * @param global {Boolean} - Should this event be handled by all handlers
  */
-Redular.prototype.scheduleEvent = function(name, date){
+Redular.prototype.scheduleEvent = function(name, date, global){
   var now = new Date();
 
   if(extras.isBefore(date, now)){
@@ -40,9 +60,14 @@ Redular.prototype.scheduleEvent = function(name, date){
 
   var diff = date.getTime() - now.getTime();
   var seconds = Math.floor(diff / 1000);
+  var eventId = this.options.id;
 
-  this.redis.set('redular:event:' + name, name);
-  this.redis.expire('redular:event:' + name, seconds);
+  if(global){
+    eventId = 'global'
+  }
+
+  this.redis.set('redular:' + eventId + ':' + name, this.options.id);
+  this.redis.expire('redular:' + eventId + ':' + name, seconds);
 };
 
 /**
@@ -71,6 +96,4 @@ Redular.prototype.defineHandler = function(name, action){
 };
 
 
-module.exports = function(port, host, options){
-  return new Redular(port, host, options);
-};
+module.exports = Redular;
