@@ -21,11 +21,11 @@ Alternatively you can set `autoConfig` to true in the Redular options to attempt
 configure Redis.
 
 # Options
-| Key        | Value   | Default                                              | Description                                                                                      |   |
-|------------|---------|------------------------------------------------------|--------------------------------------------------------------------------------------------------|---|
-| id         | String  | Random dtring                                        | The name of the Redular client, this enables events to only be handled by specific Redis clients |   |
-| autoConfig | Boolean | false                                                | When true Redular will attempt to automatically configure Redis                                  |   |
-| redis      | Object  | {   port: 6379,   host: 'localhost',   options: {} } | See here https://github.com/mranney/node_redis#rediscreateclient                                 |   |
+| Key        | Value   | Default                                              | Description                                                                                      |
+|------------|---------|------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| id         | String  | Random string                                        | The name of the Redular client, this enables events to only be handled by specific Redis clients |
+| autoConfig | Boolean | false                                                | When true Redular will attempt to automatically configure Redis                                  |
+| redis      | Object  | port: 6379, host:'localhost'                         | See [here](https://github.com/mranney/node_redis#rediscreateclient) for more options             |
 
 # Basic Usage
     var Redular = require('redular');
