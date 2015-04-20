@@ -17,6 +17,16 @@ You must enable Keyspace Notifications (Specifically expiry)
 You can use the following command inside `redis-cli` to enable expiry keyspace notificaitons.
 `config set notify-keyspace-events Ex`
 
+Alternatively you can set `autoConfig` to true in the Redular options to attempt to automatically
+configure Redis.
+
+# Options
+| Key        | Value   | Default                                              | Description                                                                                      |   |
+|------------|---------|------------------------------------------------------|--------------------------------------------------------------------------------------------------|---|
+| id         | String  | Random dtring                                        | The name of the Redular client, this enables events to only be handled by specific Redis clients |   |
+| autoConfig | Boolean | false                                                | When true Redular will attempt to automatically configure Redis                                  |   |
+| redis      | Object  | {   port: 6379,   host: 'localhost',   options: {} } | See here https://github.com/mranney/node_redis#rediscreateclient                                 |   |
+
 # Basic Usage
     var Redular = require('redular');
     
@@ -27,10 +37,16 @@ You can use the following command inside `redis-cli` to enable expiry keyspace n
       }
     }
     
+    //Setup Redular
     var myRedular = new Redular(options);
     
+    //Define a handler for an event
     myRedular.defineHandler('test-event', function(){
-        console.log('This would happen in the future');
+        console.log('Test event!');
     })
     
-    myRedular.scheduleEvent('test-event', new Date('3000-01-01T12:00:00Z');
+    //Schedule the event to happen 5 seconds in the future
+    var date = new Date();
+    date.setSeconds(date.getSeconds() + 5);
+    myRedular.scheduleEvent('test', date);
+    

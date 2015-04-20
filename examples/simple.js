@@ -1,12 +1,9 @@
 var Redular = require('../index');
 
-
-var redular = new Redular({
-  autoConfig: true
-});
+var redular = new Redular();
 
 redular.defineHandler('test', function(){
-  console.log('test');
+  console.log('Triggered in the future');
 });
 
 var date = new Date();

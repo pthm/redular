@@ -46,7 +46,6 @@ var Redular = function(options){
       }
       _this.redis.config("SET", "notify-keyspace-events", config)
     });
-
   }
 
   var expiryListener = new RedisEvent(this.redisSub, 'expired', /(redular:)(.+)(:)(.+)/);
