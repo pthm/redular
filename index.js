@@ -48,11 +48,11 @@ Redular.prototype = {
 /**
  * Schedules an event to occur some time in the future
  * @param name {String} - The name of the event
- * @param date {Date} - Javascript date object when the event should occur, must be in the future
+ * @param date {Date} - Javascript date object or string accepted by new Date(), must be in the future
  * @param global {Boolean} - Should this event be handled by all handlers
  */
 Redular.prototype.scheduleEvent = function(name, date, global){
-  var now = new Date();
+  var now = new Date(date);
 
   if(extras.isBefore(date, now)){
     return;
