@@ -53,7 +53,14 @@ var Redular = function(options){
     var eventName = key[4];
     var eventId = key[2];
     if(eventId == _this.options.id || eventId == 'global'){
-      _this.handleEvent(eventName);
+
+      _this.redis.get(key[0] + ':data', function(err, data){
+        if(data){
+          data = JSON.parse(data);
+        }
+        _this.handleEvent(eventName, data);
+      });
+
     }
   });
 };
@@ -68,7 +75,7 @@ Redular.prototype = {
  * @param date {Date} - Javascript date object or string accepted by new Date(), must be in the future
  * @param global {Boolean} - Should this event be handled by all handlers
  */
-Redular.prototype.scheduleEvent = function(name, date, global){
+Redular.prototype.scheduleEvent = function(name, date, global, data){
   var now = new Date();
   date = new Date(date);
 
@@ -84,6 +91,15 @@ Redular.prototype.scheduleEvent = function(name, date, global){
     eventId = 'global'
   }
 
+  if(data){
+    try{
+      data = JSON.stringify(data);
+    } catch (e) {
+      throw e;
+    }
+    this.redis.set('redular:' + eventId + ':' + name + ':data', data);
+  }
+
   this.redis.set('redular:' + eventId + ':' + name, this.options.id);
   this.redis.expire('redular:' + eventId + ':' + name, seconds);
 };
@@ -92,9 +108,9 @@ Redular.prototype.scheduleEvent = function(name, date, global){
  * This is called when an event occurs, if no handler exists nothing happens
  * @param name
  */
-Redular.prototype.handleEvent = function(name){
+Redular.prototype.handleEvent = function(name, data){
   if(this.handlers.hasOwnProperty(name)){
-    this.handlers[name]();
+    this.handlers[name](data);
   }
 };
 
