@@ -48,21 +48,20 @@ var Redular = function(options){
     });
   }
 
-  var expiryListener = new RedisEvent(this.redisSub, 'expired', /(redular:)(.+)(:)(.+)/);
+  var expiryListener = new RedisEvent(this.redisSub, 'expired', /redular:(.+):(.+):(.+)/);
   expiryListener.defineHandler(function(key){
-    var eventName = key[4];
-    var eventId = key[2];
-    if(eventId == _this.options.id || eventId == 'global'){
+    var clientId = key[1];
+    var eventName = key[2];
+    var eventId = key[3];
 
-      _this.redis.get(key[0] + ':data', function(err, data){
-        if(data){
-          data = JSON.parse(data);
-          _this.redis.expire(key[0] + ':data', 30);
-        }
-        _this.handleEvent(eventName, data);
-      });
+    _this.redis.get('redular-data:' + clientId + ':' + eventName + ':' + eventId, function(err, data){
+      if(data){
+        data = JSON.parse(data);
+        _this.redis.expire(key[0] + ':data', 30);
+      }
+      _this.handleEvent(eventName, data);
+    });
 
-    }
   });
 };
 
@@ -86,10 +85,11 @@ Redular.prototype.scheduleEvent = function(name, date, global, data){
 
   var diff = date.getTime() - now.getTime();
   var seconds = Math.floor(diff / 1000);
-  var eventId = this.options.id;
+  var clientId = this.options.id;
+  var eventId = shortId.generate();
 
   if(global){
-    eventId = 'global'
+    clientId = 'global'
   }
 
   if(data){
@@ -98,11 +98,11 @@ Redular.prototype.scheduleEvent = function(name, date, global, data){
     } catch (e) {
       throw e;
     }
-    this.redis.set('redular:' + eventId + ':' + name + ':data', data);
+    this.redis.set('redular-data:' + clientId + ':' + name + ':' + eventId, data);
   }
 
-  this.redis.set('redular:' + eventId + ':' + name, this.options.id);
-  this.redis.expire('redular:' + eventId + ':' + name, seconds);
+  this.redis.set('redular:' + clientId + ':' + name + ':' + eventId, this.options.id);
+  this.redis.expire('redular:' + clientId + ':' + name + ':' + eventId, seconds);
 };
 
 /**
