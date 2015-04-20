@@ -57,7 +57,7 @@ var Redular = function(options){
     _this.redis.get('redular-data:' + clientId + ':' + eventName + ':' + eventId, function(err, data){
       if(data){
         data = JSON.parse(data);
-        _this.redis.expire(key[0] + ':data', 30);
+        _this.redis.expire('redular-data:' + clientId + ':' + eventName + ':' + eventId, 30);
       }
       _this.handleEvent(eventName, data);
     });
