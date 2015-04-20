@@ -1,7 +1,9 @@
 var Redular = require('../index');
 
 
-var redular = new Redular();
+var redular = new Redular({
+  autoConfig: true
+});
 
 redular.defineHandler('test', function(){
   console.log('test');

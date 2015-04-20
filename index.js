@@ -5,22 +5,23 @@ var shortId = require('shortid');
 
 /**
  * Node.js scheduling system powered by Redis Keyspace Notifications
- * @param port {Number} - Port to connect to Redis
- * @param host {String} - Hostname to connect to Redis
- * @param options {Object} - See options here (https://github.com/mranney/node_redis#rediscreateclient)
+ * @param options {Object}
  * @constructor
  */
 var Redular = function(options){
   var _this = this;
 
   if(!options){
-    options = {
-      redis: {}
-    };
+    options = {};
+  }
+
+  if(!options.redis){
+    options.redis = {};
   }
 
   this.options = {
     id: options.id || shortId.generate(),
+    autoConfig: options.autoConfig ||  false,
     redis: {
       port: options.redis.port || 6379,
       host: options.redishost || '127.0.0.1',
@@ -30,6 +31,23 @@ var Redular = function(options){
 
   this.redisSub = redis.createClient(this.options.redis.port, this.options.redis.host, this.options.redis.options);
   this.redis = redis.createClient(this.options.redis.port, this.options.redis.host, this.options.redis.options);
+
+  if(this.options.autoConfig){
+    var config = '';
+    this.redis.config("GET", "notify-keyspace-events", function(err, data){
+      if(data){
+        config = data[1];
+      }
+      if(config.indexOf('E') == -1){
+        config += 'E'
+      }
+      if(config.indexOf('x') == -1){
+        config += 'x'
+      }
+      _this.redis.config("SET", "notify-keyspace-events", config)
+    });
+
+  }
 
   var expiryListener = new RedisEvent(this.redisSub, 'expired', /(redular:)(.+)(:)(.+)/);
   expiryListener.defineHandler(function(key){
