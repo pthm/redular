@@ -57,6 +57,7 @@ var Redular = function(options){
       _this.redis.get(key[0] + ':data', function(err, data){
         if(data){
           data = JSON.parse(data);
+          _this.redis.del(key[0] + ':data');
         }
         _this.handleEvent(eventName, data);
       });
