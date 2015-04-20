@@ -71,7 +71,7 @@ This is the default event type, they are only processed by handlers defined by t
 # Passing data to handlers
 It is possible to pass data to your handlers like so
 ```javascript
-myRedular.defineHandler('greet', function(someDate){
+myRedular.defineHandler('greet', function(someData){
     console.log('Hello ' + someData.name);
 })
 
