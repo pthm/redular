@@ -22,6 +22,7 @@ var Redular = function(options){
   this.options = {
     id: options.id || shortId.generate(),
     autoConfig: options.autoConfig ||  false,
+    dataExpiry: options.dataExpiry || 30,
     redis: {
       port: options.redis.port || 6379,
       host: options.redishost || '127.0.0.1',
@@ -57,7 +58,7 @@ var Redular = function(options){
     _this.redis.get('redular-data:' + clientId + ':' + eventName + ':' + eventId, function(err, data){
       if(data){
         data = JSON.parse(data);
-        _this.redis.expire('redular-data:' + clientId + ':' + eventName + ':' + eventId, 30);
+        _this.redis.expire('redular-data:' + clientId + ':' + eventName + ':' + eventId, _this.options.dataExpiry);
       }
       _this.handleEvent(eventName, data);
     });

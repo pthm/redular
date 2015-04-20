@@ -25,6 +25,7 @@ configure Redis.
 |------------|---------|------------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | id         | String  | Random string                                        | The name of the Redular client, this enables events to only be handled by specific Redis clients |
 | autoConfig | Boolean | false                                                | When true Redular will attempt to automatically configure Redis                                  |
+| dataExpiry | Number  | 30                                                   | Number of seconds to keep data in Redis for after event has been handled                         |
 | redis      | Object  | port: 6379, host:'localhost'                         | See [here](https://github.com/mranney/node_redis#rediscreateclient) for more options             |
 
 # Basic Usage
