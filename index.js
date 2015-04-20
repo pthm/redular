@@ -25,7 +25,7 @@ var Redular = function(options){
     dataExpiry: options.dataExpiry || 30,
     redis: {
       port: options.redis.port || 6379,
-      host: options.redishost || '127.0.0.1',
+      host: options.redis.host || '127.0.0.1',
       redis: options.redis.options || {}
     }
   };
