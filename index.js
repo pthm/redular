@@ -52,7 +52,8 @@ Redular.prototype = {
  * @param global {Boolean} - Should this event be handled by all handlers
  */
 Redular.prototype.scheduleEvent = function(name, date, global){
-  var now = new Date(date);
+  var now = new Date();
+  date = new Date(date);
 
   if(extras.isBefore(date, now)){
     return;

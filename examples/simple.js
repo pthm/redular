@@ -8,6 +8,6 @@ redular.defineHandler('test', function(){
 });
 
 var date = new Date();
-date.setSeconds(date.getSeconds() + 2);
+date.setSeconds(date.getSeconds() + 5);
 
-redular.scheduleEvent('test', new Date(date));
+redular.scheduleEvent('test', date);
