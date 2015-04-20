@@ -28,25 +28,27 @@ configure Redis.
 | redis      | Object  | port: 6379, host:'localhost'                         | See [here](https://github.com/mranney/node_redis#rediscreateclient) for more options             |
 
 # Basic Usage
-    var Redular = require('redular');
-    
-    var options = {
-      redis : {
-        port: 6379,
-        host: 'localhost'
-      }
-    }
-    
-    //Setup Redular
-    var myRedular = new Redular(options);
-    
-    //Define a handler for an event
-    myRedular.defineHandler('test-event', function(){
-        console.log('Test event!');
-    })
-    
-    //Schedule the event to happen 5 seconds in the future
-    var date = new Date();
-    date.setSeconds(date.getSeconds() + 5);
-    myRedular.scheduleEvent('test', date);
+```javascript
+var Redular = require('redular');
+
+var options = {
+  redis : {
+    port: 6379,
+    host: 'localhost'
+  }
+}
+
+//Setup Redular
+var myRedular = new Redular(options);
+
+//Define a handler for an event
+myRedular.defineHandler('test-event', function(){
+    console.log('Test event!');
+})
+
+//Schedule the event to happen 5 seconds in the future
+var date = new Date();
+date.setSeconds(date.getSeconds() + 5);
+myRedular.scheduleEvent('test', date);
+```
     
