@@ -52,4 +52,32 @@ var date = new Date();
 date.setSeconds(date.getSeconds() + 5);
 myRedular.scheduleEvent('test', date);
 ```
-    
+# Global vs Non-Global Events
+When scheduling an event you can pass in a boolean to specify if an event should be handled globally or not
+
+```javascript
+//This is a global event
+myRedular.scheduleEvent('my-event', date, true);
+
+//This is a non-global event
+myRedular.scheduleEvent('my-event', date, false);
+```
+## Global
+Global events are handled by all available handlers that match the event name and are listening for keyspace notifications.
+
+## Non-global
+This is the default event type, they are only processed by handlers defined by the same Redular instance that scheduled them.
+
+# Passing data to handlers
+It is possible to pass data to your handlers like so
+```javascript
+myRedular.defineHandler('greet', function(someDate){
+    console.log('Hello ' + someData.name);
+})
+
+myRedular.scheduleEvent('greet', date, false, {name: 'Joe'});
+```
+
+There are a few caveats with this:  
+The data is stored in Redis as a JSON string so you cannot send functions to handlers.  
+Data is passed through a JSON.stringify() before being saved to Redis, bear this in mind.
