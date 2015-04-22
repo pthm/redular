@@ -58,7 +58,6 @@ var Redular = function(options){
     _this.redis.get('redular-data:' + clientId + ':' + eventName + ':' + eventId, function(err, data){
       if(data){
         data = JSON.parse(data);
-        _this.redis.expire('redular-data:' + clientId + ':' + eventName + ':' + eventId, _this.options.dataExpiry);
       }
       _this.handleEvent(eventName, data);
     });
@@ -100,6 +99,7 @@ Redular.prototype.scheduleEvent = function(name, date, global, data){
       throw e;
     }
     this.redis.set('redular-data:' + clientId + ':' + name + ':' + eventId, data);
+    this.redis.expire('redular-data:' + clientId + ':' + name + ':' + eventId, seconds + this.options.dataExpiry);
   }
 
   this.redis.set('redular:' + clientId + ':' + name + ':' + eventId, this.options.id);
