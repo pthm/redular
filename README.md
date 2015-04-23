@@ -3,6 +3,8 @@ Node.js event scheduling system powered by Redis keyspace notifications.
 
 **This is a work in progress**
 
+[![NPM](https://nodei.co/npm/redular.png)](https://nodei.co/npm/redular/)
+
 # How it works
 This sets keys in redis with expiry times, then using the keyspace notifications triggers handlers defined in your code.
 
