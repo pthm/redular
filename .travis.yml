@@ -10,5 +10,5 @@ node_js:
 services:
   - redis-server
 install:
- — npm install mocha -g
- — npm install
+  — npm install mocha -g
+  — npm install
