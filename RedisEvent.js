@@ -13,6 +13,8 @@ var RedisEvent = function(client, event, keyPattern){
 
   this.keyPattern = keyPattern;
 
+  this.handler = null;
+
   this.redis.subscribe('__keyevent@0__:' + event);
   this.redis.on('message', function(event, key){
     var match = _this.keyPattern.exec(key);
@@ -27,9 +29,6 @@ var RedisEvent = function(client, event, keyPattern){
 };
 
 RedisEvent.prototype = {
-  redis: {},
-  keyPattern: '',
-  handler: null
 };
 
 /**
