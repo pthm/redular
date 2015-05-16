@@ -16,10 +16,13 @@ describe('Redular', function(){
   });
 
   it('should be able to define a handler', function(done){
-    Redular1.defineHandler('testEvent', function(){
-
-    });
-    done();
+    Redular1.defineHandler('testEvent', function(){});
+    var handlers = Redular1.getHandlers();
+    if(handlers.hasOwnProperty('testEvent')){
+      done();
+    } else {
+      throw 'Handler not defined'
+    }
   });
 
   it('should be able to schedule an event', function(done){
