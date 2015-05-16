@@ -25,13 +25,7 @@ describe('Redular', function(){
     }
   });
 
-  it('should be able to schedule an event', function(done){
-    var now = new Date();
-    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 1));
-    done();
-  });
-
-  it('should be able to handle an event', function(done){
+  it('should be able to schedule and handle an event', function(done){
     Redular1.defineHandler('testEvent', function(){
       done();
     });
