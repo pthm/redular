@@ -31,7 +31,7 @@ describe('Redular', function(){
     });
 
     var now = new Date();
-    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 1));
+    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 2));
   });
 
   it('should not handle events with different names', function(done){
@@ -40,7 +40,7 @@ describe('Redular', function(){
     });
 
     var now = new Date();
-    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 1));
+    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 2));
 
     setTimeout(function(){
       done();
@@ -59,7 +59,7 @@ describe('Redular', function(){
     });
 
     var now = new Date();
-    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 1));
+    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 2));
   });
 
   it('should generate unique ids for all instances', function(done){
@@ -98,7 +98,7 @@ describe('Redular', function(){
     });
 
     var now = new Date();
-    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 1), false, {test: 'Hello'});
+    Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 2), false, {test: 'Hello'});
   });
 
 });
