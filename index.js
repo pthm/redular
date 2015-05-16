@@ -11,6 +11,8 @@ var shortId = require('shortid');
 var Redular = function(options){
   var _this = this;
 
+  this.handlers = {};
+
   if(!options){
     options = {};
   }
@@ -59,14 +61,15 @@ var Redular = function(options){
       if(data){
         data = JSON.parse(data);
       }
-      _this.handleEvent(eventName, data);
+      if(clientId == _this.options.id || clientId == 'global'){
+        _this.handleEvent(eventName, data);
+      }
     });
 
   });
 };
 
 Redular.prototype = {
-  handlers: {}
 };
 
 /**
@@ -129,7 +132,21 @@ Redular.prototype.defineHandler = function(name, action){
     throw 'HandlerAlreadyExistsException';
   }
   this.handlers[name] = action;
+  return name;
 };
 
+Redular.prototype.getHandlers = function(){
+  return this.handlers;
+};
+
+Redular.prototype.deleteHandler = function(name){
+  if(this.handlers.hasOwnProperty(name)){
+    delete this.handlers[name];
+  }
+};
+
+Redular.prototype.getClientId = function(){
+  return this.options.id;
+};
 
 module.exports = Redular;
