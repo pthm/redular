@@ -1,4 +1,4 @@
-# redular
+# redular [![Build Status](https://travis-ci.org/pthm/redular.svg?branch=master)](https://travis-ci.org/pthm/redular)
 Node.js event scheduling system powered by Redis keyspace notifications.
 
 **This is a work in progress**
