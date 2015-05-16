@@ -1,7 +1,6 @@
 var Redular = require('../index');
 
 var redular = new Redular();
-var redular2 = new Redular();
 
 redular.defineHandler('goodbye', function(name){
   console.log('Goodbye!');
