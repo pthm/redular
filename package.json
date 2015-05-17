@@ -1,6 +1,6 @@
 {
   "name": "redular",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Node.js event scheduling system powered by redis keyspace notifications",
   "main": "index.js",
   "scripts": {

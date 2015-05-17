@@ -135,16 +135,28 @@ Redular.prototype.defineHandler = function(name, action){
   return name;
 };
 
+/**
+ * Returns an object with currently defined handlers
+ * @returns {{}|*}
+ */
 Redular.prototype.getHandlers = function(){
   return this.handlers;
 };
 
+/**
+ * Removes a handler from the Redular instance
+ * @param name
+ */
 Redular.prototype.deleteHandler = function(name){
   if(this.handlers.hasOwnProperty(name)){
     delete this.handlers[name];
   }
 };
 
+/**
+ * Returns the instance ID
+ * @returns {*}
+ */
 Redular.prototype.getClientId = function(){
   return this.options.id;
 };
