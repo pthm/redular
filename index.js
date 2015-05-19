@@ -15,10 +15,9 @@ var Redular = function(options){
 
   if(!options){
     options = {};
-  }
-
-  if(!options.redis){
-    options.redis = {};
+    if(!options.redis){
+      options.redis = {};
+    }
   }
 
   this.options = {
@@ -32,9 +31,12 @@ var Redular = function(options){
     }
   };
 
+  //Create redis clients
   this.redisSub = redis.createClient(this.options.redis.port, this.options.redis.host, this.options.redis.options);
   this.redis = redis.createClient(this.options.redis.port, this.options.redis.host, this.options.redis.options);
+  this.redisInstant = redis.createClient(this.options.redis.port, this.options.redis.host, this.options.redis.options);
 
+  //Attempt auto config
   if(this.options.autoConfig){
     var config = '';
     this.redis.config("GET", "notify-keyspace-events", function(err, data){
@@ -51,6 +53,7 @@ var Redular = function(options){
     });
   }
 
+  //Listen to key expiry notifications and handle events
   var expiryListener = new RedisEvent(this.redisSub, 'expired', /redular:(.+):(.+):(.+)/);
   expiryListener.defineHandler(function(key){
     var clientId = key[1];
@@ -65,8 +68,11 @@ var Redular = function(options){
         _this.handleEvent(eventName, data);
       }
     });
-
   });
+
+  //Listen to instant events and handle them
+
+
 };
 
 Redular.prototype = {
