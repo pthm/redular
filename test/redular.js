@@ -101,4 +101,12 @@ describe('Redular', function(){
     Redular1.scheduleEvent('testEvent', now.setSeconds(now.getSeconds() + 2), false, {test: 'Hello'});
   });
 
+  it('should be able to handle an instant event', function(done){
+    Redular1.defineHandler('testEvent', function(){
+      done();
+    });
+
+    Redular1.instantEvent('testEvent');
+  });
+
 });
