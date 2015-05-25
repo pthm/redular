@@ -83,3 +83,11 @@ myRedular.scheduleEvent('greet', date, false, {name: 'Joe'});
 There are a few caveats with this:  
 The data is stored in Redis as a JSON string so you cannot send functions to handlers.  
 Data is passed through a JSON.stringify() before being saved to Redis, bear this in mind.
+
+# Instant events
+You can send an event to Redular for immediate handling by using the instantEvent function
+```javascript
+myRedular.instantEvent('greet', false, {name: 'Joe'})
+```
+ 
+The options are the same as the scheduleEvent function but without passing a date object
