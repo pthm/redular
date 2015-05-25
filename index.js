@@ -15,9 +15,10 @@ var Redular = function(options){
 
   if(!options){
     options = {};
-    if(!options.redis){
-      options.redis = {};
-    }
+  }
+
+  if(!options.redis){
+    options.redis = {};
   }
 
   this.options = {
@@ -71,7 +72,17 @@ var Redular = function(options){
   });
 
   //Listen to instant events and handle them
-
+  this.redisInstant.subscribe('redular:instant');
+  this.redisInstant.on('message', function(channel, message){
+    try{
+      var parsedMessage = JSON.parse(message);
+    } catch (e){
+      throw e;
+    }
+    if(parsedMessage.client == _this.options.id || parsedMessage.client == 'global') {
+      _this.handleEvent(parsedMessage.event, parsedMessage.data);
+    }
+  });
 
 };
 
@@ -83,6 +94,7 @@ Redular.prototype = {
  * @param name {String} - The name of the event
  * @param date {Date} - Javascript date object or string accepted by new Date(), must be in the future
  * @param global {Boolean} - Should this event be handled by all handlers
+ * @param data {Object} - Data to be passed to handler
  */
 Redular.prototype.scheduleEvent = function(name, date, global, data){
   var now = new Date();
@@ -113,6 +125,26 @@ Redular.prototype.scheduleEvent = function(name, date, global, data){
 
   this.redis.set('redular:' + clientId + ':' + name + ':' + eventId, this.options.id);
   this.redis.expire('redular:' + clientId + ':' + name + ':' + eventId, seconds);
+};
+
+/**
+ * Emit an event to be handled immediately
+ * @param name {String} - The name of the event
+ * @param global {Boolean} - Should this event be handled by all handlers
+ * @param data {Object} - Data to be passed to handler
+ */
+Redular.prototype.instantEvent = function(name, global, data){
+  var _this = this;
+  var clientId = _this.options.id;
+  if(global){
+    clientId = 'global';
+  }
+  var payload = JSON.stringify({
+    event: name,
+    client: clientId,
+    data: data
+  });
+  this.redis.publish('redular:instant', payload);
 };
 
 /**
