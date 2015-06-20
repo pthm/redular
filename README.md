@@ -11,13 +11,17 @@ This sets keys in redis with expiry times, then using the keyspace notifications
 This is useful because it means you can define handlers and trigger them from anywhere in your infrastructure.
 
 # Installation
-`npm install redular`
+````
+$ npm install redular
+````
 
 This module requires at least version 2.8.0 of Redis
 You must enable Keyspace Notifications (Specifically expiry)
 
 You can use the following command inside `redis-cli` to enable expiry keyspace notificaitons.
-`config set notify-keyspace-events Ex`
+````
+127.0.0.1:6379> config set notify-keyspace-events Ex
+````
 
 Alternatively you can set `autoConfig` to true in the Redular options to attempt to automatically
 configure Redis.
@@ -93,5 +97,8 @@ myRedular.instantEvent('greet', false, {name: 'Joe'})
 The options are the same as the scheduleEvent function but without passing a date object
 
 # Testing
-Run `npm test`  
-Tests are build with mocha
+````
+$ npm install
+$ npm test
+````
+Tests are built with mocha
