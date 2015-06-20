@@ -91,3 +91,7 @@ myRedular.instantEvent('greet', false, {name: 'Joe'})
 ```
  
 The options are the same as the scheduleEvent function but without passing a date object
+
+# Testing
+Run `npm test`  
+Tests are build with mocha
